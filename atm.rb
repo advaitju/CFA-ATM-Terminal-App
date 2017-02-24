@@ -1,39 +1,58 @@
-balance = 100
-change = 20
-choice = ''
-
-def deposit( balance, change )
-  balance = balance + change
-  puts "Balance: #{balance}"
-  return balance
+def get_input(prompt)
+  print prompt
+  return gets.chomp
 end
 
-def withdraw( balance, change )
-  balance = balance - change
-  puts "Balance: #{balance}"
-  return balance
-end
-
-def get_input
-  puts "ATM : Input 'D' to Deposit | 'W' to withdraw | 'X' to exit:"
-  choice = gets.chomp.downcase
-  if choice == 'x'
-    return false
+class Account
+  def initialize(balance, account_holder)
+    @balance = balance
+    @account_holder = account_holder
   end
-  return choice
+
+  attr_accessor :balance
+  attr_accessor :account_holder
 end
 
-while choice = get_input
-  if ( choice == 'd' )
-    balance = deposit( balance, change )
-  elsif ( choice == 'w' )
-    if balance >= change
-      balance = withdraw( balance, change )
+class Atm
+  def initialize(account)
+    @account = account
+  end
+
+  def withdraw(amount)
+    if @account.balance >= amount
+      @account.balance = @account.balance - amount
     else
-      puts "You have $0 balance. Please deposit more money."
+      puts "Insufficient funds. Please deposit more funds."
     end
-  else
-    puts "Please try again."
+  end
+
+  def deposit(amount)
+    @account.balance = @account.balance + amount
+  end
+
+  def interface
+    puts "Welcome to FatCats(R) ATM"
+    puts "Current balance: $#{@account.balance}"
+    while true
+      choice = get_input("\nChoose transaction: Input 'D' to deposit | 'W' to withdraw | 'X' to exit: ").downcase
+      case choice
+      when 'w'
+        withdraw(get_input("Amount: ").to_i)
+        puts "New balance: #{@account.balance}"
+      when 'd'
+        deposit(get_input("Amount: ").to_i)
+        puts "New balance: #{@account.balance}"
+      when 'x'
+        break
+      else
+        puts "Please try again."
+      end
+    end
+    puts "\nThank you for enriching FatCats(R) ATM.\nYour funds support valuable catnip farmers."
   end
 end
-puts "Thank you for using the ATM."
+
+account = Account.new(500, "Advait")
+atm = Atm.new(account)
+
+atm.interface
