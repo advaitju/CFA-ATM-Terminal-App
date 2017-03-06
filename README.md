@@ -14,7 +14,7 @@ Currently only accepts withdrawals and deposits with whole dollar amounts.
 Officially owned and operated by FatCats(R) ATM.
 ## Installation
 1. Clone repo
-2. Run in cloned directory
+2. Run command in cloned directory
 ```
 ruby atm.rb
 ```
